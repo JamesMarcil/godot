@@ -31,6 +31,7 @@
 #include "shader_gles3.h"
 
 #include "core/print_string.h"
+#include "modules/godot_tracy/profiler.h"
 
 //#define DEBUG_OPENGL
 
@@ -111,7 +112,7 @@ GLint ShaderGLES3::get_uniform_location(int p_index) const {
 }
 
 bool ShaderGLES3::bind() {
-
+	ZoneScopedN("ShaderGLES3::bind");
 	if (active != this || !version || new_conditional_version.key != conditional_version.key) {
 		conditional_version = new_conditional_version;
 		version = get_current_version();
@@ -165,7 +166,7 @@ static void _display_error_with_code(const String &p_error, const Vector<const c
 }
 
 ShaderGLES3::Version *ShaderGLES3::get_current_version() {
-
+	ZoneScopedN("ShaderGLES3::get_current_version");
 	Version *_v = version_map.getptr(conditional_version);
 
 	if (_v) {
