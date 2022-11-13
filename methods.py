@@ -682,6 +682,7 @@ def generate_vs_project(env, num_jobs):
                 "target=$(Configuration)",
                 "progress=no",
                 "tools=!tools!",
+                "module_godot_tracy_enabled=yes",
                 "-j%s" % num_jobs,
             ]
 
