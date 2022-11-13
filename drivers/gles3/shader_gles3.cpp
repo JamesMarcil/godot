@@ -128,7 +128,10 @@ bool ShaderGLES3::bind() {
 		return false;
 	}
 
-	glUseProgram(version->id);
+	{
+		TracyGpuZone("ShaderGLES3::bind() - glUseProgram(version->id)");
+		glUseProgram(version->id);
+	}
 
 	DEBUG_TEST_ERROR("Use Program");
 
@@ -193,9 +196,18 @@ ShaderGLES3::Version *ShaderGLES3::get_current_version() {
 	} else {
 		if (v.ok) {
 			//bye bye shaders
-			glDeleteShader(v.vert_id);
-			glDeleteShader(v.frag_id);
-			glDeleteProgram(v.id);
+			{
+				TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteShader(v.vert_id)");
+				glDeleteShader(v.vert_id);
+			}
+			{
+				TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteShader(v.frag_id)");
+				glDeleteShader(v.frag_id);
+			}
+			{
+				TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteProgram(v.id)");
+				glDeleteProgram(v.id);
+			}
 			v.id = 0;
 		}
 	}
@@ -249,7 +261,10 @@ ShaderGLES3::Version *ShaderGLES3::get_current_version() {
 
 	/* CREATE PROGRAM */
 
-	v.id = glCreateProgram();
+	{
+		TracyGpuZone("ShaderGLES3::get_current_version() - glCreateProgram()");
+		v.id = glCreateProgram();
+	}
 
 	ERR_FAIL_COND_V(v.id == 0, NULL);
 
@@ -305,9 +320,18 @@ ShaderGLES3::Version *ShaderGLES3::get_current_version() {
 	}
 #endif
 
-	v.vert_id = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(v.vert_id, strings.size(), &strings[0], NULL);
-	glCompileShader(v.vert_id);
+	{
+		TracyGpuZone("ShaderGLES3::get_current_version() - glCreateShader(GL_VERTEX_SHADER)");
+		v.vert_id = glCreateShader(GL_VERTEX_SHADER);
+	}
+	{
+		TracyGpuZone("ShaderGLES3::get_current_version() - glShaderSource(v.vert_id, strings.size(), &strings[0], NULL)");
+		glShaderSource(v.vert_id, strings.size(), &strings[0], NULL);
+	}
+	{
+		TracyGpuZone("ShaderGLES3::get_current_version() - glCompileShader(v.vert_id);");
+		glCompileShader(v.vert_id);
+	}
 
 	GLint status;
 
@@ -319,8 +343,14 @@ ShaderGLES3::Version *ShaderGLES3::get_current_version() {
 
 		if (iloglen < 0) {
 
-			glDeleteShader(v.vert_id);
-			glDeleteProgram(v.id);
+      {
+        TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteShader(v.vert_id)");
+			  glDeleteShader(v.vert_id);
+      }
+      {
+        TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteProgram(v.id)");
+			  glDeleteProgram(v.id);
+      }
 			v.id = 0;
 
 			ERR_PRINT("Vertex shader compilation failed with empty log");
@@ -340,8 +370,14 @@ ShaderGLES3::Version *ShaderGLES3::get_current_version() {
 			err_string += ilogmem;
 			_display_error_with_code(err_string, strings);
 			memfree(ilogmem);
-			glDeleteShader(v.vert_id);
-			glDeleteProgram(v.id);
+      {
+        TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteShader(v.vert_id)");
+			  glDeleteShader(v.vert_id);
+      }
+      {
+        TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteProgram(v.id)");
+			  glDeleteProgram(v.id);
+      }
 			v.id = 0;
 		}
 
@@ -400,9 +436,18 @@ ShaderGLES3::Version *ShaderGLES3::get_current_version() {
 	}
 #endif
 
-	v.frag_id = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(v.frag_id, strings.size(), &strings[0], NULL);
-	glCompileShader(v.frag_id);
+	{
+		TracyGpuZone("ShaderGLES3::get_current_version() - glCreateShader(GL_FRAGMENT_SHADER)");
+		v.frag_id = glCreateShader(GL_FRAGMENT_SHADER);
+	}
+	{
+		TracyGpuZone("ShaderGLES3::get_current_version() - glShaderSource(v.frag_id, strings.size(), &strings[0], NULL)");
+		glShaderSource(v.frag_id, strings.size(), &strings[0], NULL);
+	}
+	{
+		TracyGpuZone("ShaderGLES3::get_current_version() - glCompileShader(v.frag_id)");
+		glCompileShader(v.frag_id);
+	}
 
 	glGetShaderiv(v.frag_id, GL_COMPILE_STATUS, &status);
 	if (status == GL_FALSE) {
@@ -412,9 +457,18 @@ ShaderGLES3::Version *ShaderGLES3::get_current_version() {
 
 		if (iloglen < 0) {
 
-			glDeleteShader(v.frag_id);
-			glDeleteShader(v.vert_id);
-			glDeleteProgram(v.id);
+      {
+        TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteShader(v.frag_id)");
+			  glDeleteShader(v.frag_id);
+      }
+      {
+        TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteShader(v.vert_id)");
+			  glDeleteShader(v.vert_id);
+      }
+      {
+        TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteProgram(v.id)");
+			  glDeleteProgram(v.id);
+      }
 			v.id = 0;
 			ERR_PRINT("Fragment shader compilation failed with empty log");
 		} else {
@@ -434,22 +488,40 @@ ShaderGLES3::Version *ShaderGLES3::get_current_version() {
 			_display_error_with_code(err_string, strings);
 			ERR_PRINT(err_string.ascii().get_data());
 			memfree(ilogmem);
-			glDeleteShader(v.frag_id);
-			glDeleteShader(v.vert_id);
-			glDeleteProgram(v.id);
+      {
+        TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteShader(v.frag_id)");
+			  glDeleteShader(v.frag_id);
+      }
+      {
+        TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteShader(v.vert_id)");
+			  glDeleteShader(v.vert_id);
+      }
+      {
+        TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteProgram(v.id)");
+			  glDeleteProgram(v.id);
+      }
 			v.id = 0;
 		}
 
 		ERR_FAIL_V(NULL);
 	}
 
-	glAttachShader(v.id, v.frag_id);
-	glAttachShader(v.id, v.vert_id);
+	{
+		TracyGpuZone("ShaderGLES3::get_current_version() - glAttachShader(v.id, v.frag_id)");
+		glAttachShader(v.id, v.frag_id);
+	}
+	{
+		TracyGpuZone("ShaderGLES3::get_current_version() - glAttachShader(v.id, v.vert_id)");
+		glAttachShader(v.id, v.vert_id);
+	}
 
 	// bind attributes before linking
 	for (int i = 0; i < attribute_pair_count; i++) {
 
-		glBindAttribLocation(v.id, attribute_pairs[i].index, attribute_pairs[i].name);
+		{
+			TracyGpuZone("ShaderGLES3::get_current_version() - glBindAttribLocation(v.id, attribute_pairs[i].index, attribute_pairs[i].name)");
+			glBindAttribLocation(v.id, attribute_pairs[i].index, attribute_pairs[i].name);
+		}
 	}
 
 	//if feedback exists, set it up
@@ -465,11 +537,17 @@ ShaderGLES3::Version *ShaderGLES3::get_current_version() {
 		}
 
 		if (feedback.size()) {
-			glTransformFeedbackVaryings(v.id, feedback.size(), feedback.ptr(), GL_INTERLEAVED_ATTRIBS);
+			{
+				TracyGpuZone("ShaderGLES3::get_current_version() - glTransformFeedbackVaryings(v.id, feedback.size(), feedback.ptr(), GL_INTERLEAVED_ATTRIBS)");
+				glTransformFeedbackVaryings(v.id, feedback.size(), feedback.ptr(), GL_INTERLEAVED_ATTRIBS);
+			}
 		}
 	}
 
-	glLinkProgram(v.id);
+	{
+		TracyGpuZone("ShaderGLES3::get_current_version() - glLinkProgram(v.id)");
+		glLinkProgram(v.id);
+	}
 
 	glGetProgramiv(v.id, GL_LINK_STATUS, &status);
 
@@ -480,9 +558,18 @@ ShaderGLES3::Version *ShaderGLES3::get_current_version() {
 
 		if (iloglen < 0) {
 
-			glDeleteShader(v.frag_id);
-			glDeleteShader(v.vert_id);
-			glDeleteProgram(v.id);
+      {
+        TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteShader(v.frag_id)");
+			  glDeleteShader(v.frag_id);
+      }
+      {
+        TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteShader(v.vert_id)");
+			  glDeleteShader(v.vert_id);
+      }
+      {
+        TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteProgram(v.id)");
+			  glDeleteProgram(v.id);
+      }
 			v.id = 0;
 			ERR_FAIL_COND_V(iloglen < 0, NULL);
 		}
@@ -502,9 +589,18 @@ ShaderGLES3::Version *ShaderGLES3::get_current_version() {
 		_display_error_with_code(err_string, strings);
 		ERR_PRINT(err_string.ascii().get_data());
 		Memory::free_static(ilogmem);
-		glDeleteShader(v.frag_id);
-		glDeleteShader(v.vert_id);
-		glDeleteProgram(v.id);
+    {
+      TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteShader(v.frag_id)");
+		  glDeleteShader(v.frag_id);
+    }
+    {
+      TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteShader(v.vert_id)");
+		  glDeleteShader(v.vert_id);
+    }
+    {
+      TracyGpuZone("ShaderGLES3::get_current_version() - glDeleteProgram(v.id)");
+		  glDeleteProgram(v.id);
+    }
 		v.id = 0;
 
 		ERR_FAIL_V(NULL);
@@ -512,35 +608,57 @@ ShaderGLES3::Version *ShaderGLES3::get_current_version() {
 
 	/* UNIFORMS */
 
-	glUseProgram(v.id);
+	{
+		TracyGpuZone("ShaderGLES3::get_shader_name() - glUseProgram(v.id)");
+		glUseProgram(v.id);
+	}
 
 	//print_line("uniforms:  ");
 	for (int j = 0; j < uniform_count; j++) {
 
-		v.uniform_location[j] = glGetUniformLocation(v.id, uniform_names[j]);
+		{
+			TracyGpuZone("ShaderGLES3::get_shader_name() - glGetUniformLocation(v.id, uniform_names[j])");
+			v.uniform_location[j] = glGetUniformLocation(v.id, uniform_names[j]);
+		}
 		//print_line("uniform "+String(uniform_names[j])+" location "+itos(v.uniform_location[j]));
 	}
 
 	// set texture uniforms
 	for (int i = 0; i < texunit_pair_count; i++) {
 
-		GLint loc = glGetUniformLocation(v.id, texunit_pairs[i].name);
+		GLint loc;
+		{
+			TracyGpuZone("ShaderGLES3::get_shader_name() - glGetUniformLocation(v.id, texunit_pairs[i].name)");
+			loc = glGetUniformLocation(v.id, texunit_pairs[i].name);
+		}
+
 		if (loc >= 0) {
 			if (texunit_pairs[i].index < 0) {
-				glUniform1i(loc, max_image_units + texunit_pairs[i].index); //negative, goes down
+				{
+					TracyGpuZone("ShaderGLES3::get_shader_name() - glUniform1i(loc, max_image_units + texunit_pairs[i].index)");
+					glUniform1i(loc, max_image_units + texunit_pairs[i].index); //negative, goes down
+				}
 			} else {
 
-				glUniform1i(loc, texunit_pairs[i].index);
+				{
+					TracyGpuZone("ShaderGLES3::get_shader_name() - glUniform1i(loc, texunit_pairs[i].index)");
+					glUniform1i(loc, texunit_pairs[i].index);
+				}
 			}
 		}
 	}
 
 	// assign uniform block bind points
 	for (int i = 0; i < ubo_count; i++) {
-
-		GLint loc = glGetUniformBlockIndex(v.id, ubo_pairs[i].name);
-		if (loc >= 0)
+		GLint loc;
+		{
+			TracyGpuZone("ShaderGLES3::get_shader_name() - glGetUniformBlockIndex(v.id, ubo_pairs[i].name)");
+			loc = glGetUniformBlockIndex(v.id, ubo_pairs[i].name);
+		}
+		if (loc >= 0) {
+			TracyGpuZone("ShaderGLES3::get_shader_name() - glUniformBlockBinding(v.id, loc, ubo_pairs[i].index)");
 			glUniformBlockBinding(v.id, loc, ubo_pairs[i].index);
+		}
 	}
 
 	if (cc) {
@@ -548,12 +666,21 @@ ShaderGLES3::Version *ShaderGLES3::get_current_version() {
 		v.texture_uniform_locations.resize(cc->texture_uniforms.size());
 		for (int i = 0; i < cc->texture_uniforms.size(); i++) {
 
-			v.texture_uniform_locations.write[i] = glGetUniformLocation(v.id, String(cc->texture_uniforms[i]).ascii().get_data());
-			glUniform1i(v.texture_uniform_locations[i], i + base_material_tex_index);
+      {
+        TracyGpuZone("ShaderGLES3::get_current_version() - v.texture_uniform_locations.write[i] = glGetUniformLocation(v.id, String(cc->texture_uniforms[i]).ascii().get_data())");
+			  v.texture_uniform_locations.write[i] = glGetUniformLocation(v.id, String(cc->texture_uniforms[i]).ascii().get_data());
+      }
+      {
+        TracyGpuZone("ShaderGLES3::get_current_version() - glUniform1i(v.texture_uniform_locations[i], i + base_material_tex_index)");
+			  glUniform1i(v.texture_uniform_locations[i], i + base_material_tex_index);
+      }
 		}
 	}
 
-	glUseProgram(0);
+	{
+		TracyGpuZone("ShaderGLES3::get_shader_name() - glUseProgram(0)");
+		glUseProgram(0);
+	}
 
 	v.ok = true;
 	if (cc) {
