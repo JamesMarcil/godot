@@ -1620,6 +1620,7 @@ Error OS_Windows::initialize(const VideoMode &p_desired, int p_video_driver, int
 			if (RasterizerGLES3::is_viable() == OK) {
 				RasterizerGLES3::register_config();
 				RasterizerGLES3::make_current();
+				TracyGpuContext;
 				break;
 			} else {
 				if (GLOBAL_GET("rendering/quality/driver/fallback_to_gles2") || editor) {
@@ -3422,6 +3423,7 @@ void OS_Windows::make_rendering_thread() {
 void OS_Windows::swap_buffers() {
 
 	gl_context->swap_buffers();
+	TracyGpuCollect;
 }
 
 void OS_Windows::force_process_input() {
