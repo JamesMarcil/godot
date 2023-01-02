@@ -1567,7 +1567,7 @@ VisualShader::VisualShader() {
 VisualShader::~VisualShader() {
 	OS::Time current_time = OS::get_singleton()->get_time(false);
 
-	String format_string = "[%s:%s:%s] Unloaded %s %s";
+	String format_string = "[%s:%s:%s] Unloaded class:%s RID:%d path:%s";
 
 	Array args;
 	args.clear();
@@ -1575,6 +1575,7 @@ VisualShader::~VisualShader() {
 	args.push_back(itos(current_time.min).pad_zeros(2));
 	args.push_back(itos(current_time.sec).pad_zeros(2));
 	args.push_back(get_class());
+	args.push_back(get_rid().get_id());
 	args.push_back(get_path());
 
 	bool is_error;
