@@ -417,10 +417,13 @@ RES ResourceLoader::load(const String &p_path, const String &p_type_hint, bool p
 		_loaded_callback(res, p_path);
 	}
 
-	if (res->is_class("Material") || res->is_class("Shader")) {
+	bool is_material = res->is_class("Material");
+	bool is_shader = res->is_class("Shader");
+
+	if (is_material || is_shader) {
 		OS::Time current_time = OS::get_singleton()->get_time(false);
 
-		String format_string = "[%s:%s:%s] Loaded %s %s";
+		String format_string = "[%s:%s:%s] Loaded class:%s RID:%d path:%s";
 
 		Array args;
 		args.clear();
@@ -428,6 +431,7 @@ RES ResourceLoader::load(const String &p_path, const String &p_type_hint, bool p
 		args.push_back(itos(current_time.min).pad_zeros(2));
 		args.push_back(itos(current_time.sec).pad_zeros(2));
 		args.push_back(res->get_class());
+		args.push_back(res->get_rid().get_id());
 		args.push_back(res->get_path());
 
 		bool is_error;
