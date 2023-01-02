@@ -231,6 +231,25 @@ void ShaderMaterial::set_shader(const Ref<Shader> &p_shader) {
 	VS::get_singleton()->material_set_shader(_get_material(), rid);
 	_change_notify(); //properties for shader exposed
 	emit_changed();
+
+	OS::Time current_time = OS::get_singleton()->get_time(false);
+
+	String format_string = "[%s:%s:%s] Assigned class:%s RID:%d path:%s to class:%s RID:%d path:%s";
+
+	Array args;
+	args.clear();
+	args.push_back(itos(current_time.hour).pad_zeros(2));
+	args.push_back(itos(current_time.min).pad_zeros(2));
+	args.push_back(itos(current_time.sec).pad_zeros(2));
+	args.push_back(p_shader->get_class());
+	args.push_back(p_shader->get_rid().get_id());
+	args.push_back(p_shader->get_path());
+	args.push_back(get_class());
+	args.push_back(get_rid().get_id());
+	args.push_back(get_path());
+
+	bool is_error;
+	print_line(format_string.sprintf(args, &is_error));
 }
 
 Ref<Shader> ShaderMaterial::get_shader() const {
