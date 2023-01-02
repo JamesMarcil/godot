@@ -29,6 +29,7 @@
 /*************************************************************************/
 
 #include "shader.h"
+#include "core/os/os.h"
 #include "core/os/file_access.h"
 #include "scene/scene_string_names.h"
 #include "servers/visual/shader_language.h"
@@ -191,6 +192,21 @@ Shader::Shader() {
 Shader::~Shader() {
 
 	VisualServer::get_singleton()->free(shader);
+
+	OS::Time current_time = OS::get_singleton()->get_time(false);
+
+	String format_string = "[%s:%s:%s] Unloaded %s %s";
+
+	Array args;
+	args.clear();
+	args.push_back(itos(current_time.hour).pad_zeros(2));
+	args.push_back(itos(current_time.min).pad_zeros(2));
+	args.push_back(itos(current_time.sec).pad_zeros(2));
+	args.push_back(get_class());
+	args.push_back(get_path());
+
+	bool is_error;
+	print_line(format_string.sprintf(args, &is_error));
 }
 ////////////
 

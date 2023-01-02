@@ -31,6 +31,7 @@
 #include "material.h"
 
 #include "core/engine.h"
+#include "core/os/os.h"
 
 #ifdef TOOLS_ENABLED
 #include "editor/editor_settings.h"
@@ -107,6 +108,21 @@ Material::Material() {
 Material::~Material() {
 
 	VisualServer::get_singleton()->free(material);
+
+	OS::Time current_time = OS::get_singleton()->get_time(false);
+
+	String format_string = "[%s:%s:%s] Unloaded %s %s";
+
+	Array args;
+	args.clear();
+	args.push_back(itos(current_time.hour).pad_zeros(2));
+	args.push_back(itos(current_time.min).pad_zeros(2));
+	args.push_back(itos(current_time.sec).pad_zeros(2));
+	args.push_back(get_class());
+	args.push_back(get_path());
+
+	bool is_error;
+	print_line(format_string.sprintf(args, &is_error));
 }
 
 ///////////////////////////////////
@@ -286,6 +302,20 @@ ShaderMaterial::ShaderMaterial() {
 }
 
 ShaderMaterial::~ShaderMaterial() {
+	OS::Time current_time = OS::get_singleton()->get_time(false);
+
+	String format_string = "[%s:%s:%s] Unloaded %s %s";
+
+	Array args;
+	args.clear();
+	args.push_back(itos(current_time.hour).pad_zeros(2));
+	args.push_back(itos(current_time.min).pad_zeros(2));
+	args.push_back(itos(current_time.sec).pad_zeros(2));
+	args.push_back(get_class());
+	args.push_back(get_path());
+
+	bool is_error;
+	print_line(format_string.sprintf(args, &is_error));
 }
 
 /////////////////////////////////
@@ -2428,4 +2458,19 @@ SpatialMaterial::~SpatialMaterial() {
 	}
 
 	material_mutex.unlock();
+
+	OS::Time current_time = OS::get_singleton()->get_time(false);
+
+	String format_string = "[%s:%s:%s] Unloaded %s %s";
+
+	Array args;
+	args.clear();
+	args.push_back(itos(current_time.hour).pad_zeros(2));
+	args.push_back(itos(current_time.min).pad_zeros(2));
+	args.push_back(itos(current_time.sec).pad_zeros(2));
+	args.push_back(get_class());
+	args.push_back(get_path());
+
+	bool is_error;
+	print_line(format_string.sprintf(args, &is_error));
 }

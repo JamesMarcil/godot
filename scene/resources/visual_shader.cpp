@@ -31,6 +31,7 @@
 #include "visual_shader.h"
 
 #include "core/vmap.h"
+#include "core/os/os.h"
 #include "servers/visual/shader_types.h"
 
 bool VisualShaderNode::is_simple_decl() const {
@@ -1561,6 +1562,23 @@ VisualShader::VisualShader() {
 	}
 
 	dirty.set();
+}
+
+VisualShader::~VisualShader() {
+	OS::Time current_time = OS::get_singleton()->get_time(false);
+
+	String format_string = "[%s:%s:%s] Unloaded %s %s";
+
+	Array args;
+	args.clear();
+	args.push_back(itos(current_time.hour).pad_zeros(2));
+	args.push_back(itos(current_time.min).pad_zeros(2));
+	args.push_back(itos(current_time.sec).pad_zeros(2));
+	args.push_back(get_class());
+	args.push_back(get_path());
+
+	bool is_error;
+	print_line(format_string.sprintf(args, &is_error));
 }
 
 ///////////////////////////////////////////////////////////

@@ -161,6 +161,7 @@ public:
 	String validate_uniform_name(const String &p_name, const Ref<VisualShaderNodeUniform> &p_uniform) const;
 
 	VisualShader();
+	~VisualShader();
 };
 
 VARIANT_ENUM_CAST(VisualShader::Type)
