@@ -31,6 +31,7 @@
 #include "shader_gles3.h"
 
 #include "core/print_string.h"
+#include "core/os/os.h"
 
 //#define DEBUG_OPENGL
 
@@ -137,6 +138,23 @@ bool ShaderGLES3::bind() {
 }
 
 void ShaderGLES3::unbind() {
+
+	OS::Time current_time = OS::get_singleton()->get_time(false);
+
+	String format_string = "[%s:%s:%s] Unbind id:%d vert_id:%d frag_id:%d code_version:%d";
+
+	Array args;
+	args.clear();
+	args.push_back(itos(current_time.hour).pad_zeros(2));
+	args.push_back(itos(current_time.min).pad_zeros(2));
+	args.push_back(itos(current_time.sec).pad_zeros(2));
+	args.push_back(version->id);
+	args.push_back(version->vert_id);
+	args.push_back(version->frag_id);
+	args.push_back(version->code_version);
+
+	bool is_error;
+	print_line(format_string.sprintf(args, &is_error));
 
 	version = NULL;
 	glUseProgram(0);
